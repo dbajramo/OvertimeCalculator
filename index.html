@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Overtime calculator</title>
+  <script src="./vue.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <label for="hoursMonth">Hours in Month </label>
+    <input v-model="hoursMonth" type="number" id="hoursMonth"> 
+    {{ hoursMonth }}
+    <br>
+    <label for="bruto1Salary">Bruto 1 Salary</label>
+    <input v-model="bruto1Salary" type="number" id="bruto1Salary">
+    {{ bruto1Salary }}
+    <br>
+    <label for="overtimeHours">Overtime Hours</label>
+    <input v-model="overtimeHours" type="number" id="overtimeHours">
+    {{ overtimeHours }}
+    <br>
+    Bruto 1 Salary with Overtime Hours: {{ newBruto1Salary }}
+    <br>
+    Total Overtime Hours in Bruto 1: {{ totalOvertimePrice }}
+    <br>
+    Overtime Hours Price in Bruto 1: {{ pricePerHour }}
+  </div>
+
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        hoursMonth: 0,
+        bruto1Salary: 0,
+        overtimeHours: 0
+      },
+      computed: {
+        totalOvertimePrice: function () {
+            return parseFloat(this.pricePerHour) * parseFloat(this.overtimeHours);
+        },
+        pricePerHour: function () {
+            return parseFloat(this.bruto1Salary) / parseFloat(this.hoursMonth);
+        },
+        newBruto1Salary: function () {
+            return parseFloat(this.totalOvertimePrice) + parseFloat(this.bruto1Salary);
+        }
+      }
+    })
+  </script>
+</body>
+</html>
