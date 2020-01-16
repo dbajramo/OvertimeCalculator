@@ -2,7 +2,9 @@
 <html>
 <head>
   <title>Overtime calculator</title>
-  <script src="./vue.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+  <script src="./importantLogic.js"></script>
 </head>
 <body>
   <div id="app">
@@ -18,16 +20,29 @@
     <input v-model="overtimeHours" type="number" id="overtimeHours">
     {{ overtimeHours }}
     <br>
-    Bruto 1 Salary with Overtime Hours: {{ newBruto1Salary }}
+    <a href="https://www.moj-posao.net/Kalkulator-Placa/" target="_blank">Kalkulator Placa</a>
+    <h2>Old calculation</h2>
+    Overtime Hours Price in Bruto 1: {{ pricePerHour }}
     <br>
     Total Overtime Hours in Bruto 1: {{ totalOvertimePrice }}
     <br>
-    Overtime Hours Price in Bruto 1: {{ pricePerHour }}
+    Bruto 1 Salary with Overtime Hours: {{ newBruto1Salary }}
+    <a :href="`https://www.moj-posao.net/Kalkulator-Placa/?salary=${newBruto1Salary}&location=162&children=&supporting=&disabilityCoeff=0&type=g2n`" target="_blank">Calculate netto</a>
     <br>
+    Bruto 1 Salary with Overtime Hours (deducted 500 for III. stup): {{ newBruto1SalaryWithTreciStup }}
+    <a :href="`https://www.moj-posao.net/Kalkulator-Placa/?salary=${newBruto1SalaryWithTreciStup}&location=162&children=&supporting=&disabilityCoeff=0&type=g2n`" target="_blank">Calculate netto</a>
+    <h2>New calculation</h2>
+    Overtime Hours Price in Bruto 1: {{ pricePerHourNew }}
     <br>
-    <a href="https://www.moj-posao.net/Kalkulator-Placa/" target="_blank">Kalkulator Placa</a>
+    Total Overtime Hours in Bruto 1: {{ totalOvertimePriceNew }}
+    <br>
+    Bruto 1 Salary with Overtime Hours: {{ newBruto1SalaryNew }}
+    <a :href="`https://www.moj-posao.net/Kalkulator-Placa/?salary=${newBruto1SalaryNew}&location=162&children=&supporting=&disabilityCoeff=0&type=g2n`" target="_blank">Calculate netto</a>
+    <br>
+    Bruto 1 Salary with Overtime Hours (deducted 500 for III. stup): {{ newBruto1SalaryNewWithTreciStup }}
+    <a :href="`https://www.moj-posao.net/Kalkulator-Placa/?salary=${newBruto1SalaryNewWithTreciStup}&location=162&children=&supporting=&disabilityCoeff=0&type=g2n`" target="_blank">Calculate netto</a>
   </div>
-
+  
   <script>
     var app = new Vue({
       el: '#app',
@@ -38,13 +53,34 @@
       },
       computed: {
         totalOvertimePrice: function () {
-            return parseFloat(this.pricePerHour) * parseFloat(this.overtimeHours);
+            return this.decimalPoints(this.pricePerHour * parseFloat(this.overtimeHours));
         },
         pricePerHour: function () {
-            return parseFloat(this.bruto1Salary) / parseFloat(this.hoursMonth);
+            return this.decimalPoints(parseFloat(this.bruto1Salary) / parseFloat(this.hoursMonth));
         },
         newBruto1Salary: function () {
-            return parseFloat(this.totalOvertimePrice) + parseFloat(this.bruto1Salary);
+            return this.decimalPoints(parseFloat(this.totalOvertimePrice) + parseFloat(this.bruto1Salary));
+        },
+        newBruto1SalaryWithTreciStup: function () {
+            return this.decimalPoints(parseFloat(this.totalOvertimePrice) + parseFloat(this.bruto1Salary) - 500);
+        },
+
+        totalOvertimePriceNew: function () {
+            return this.decimalPoints(parseFloat(this.pricePerHourNew) * parseFloat(this.overtimeHours));
+        },
+        pricePerHourNew: function () {
+            return this.decimalPoints(parseFloat(this.bruto1Salary) / parseFloat(this.hoursMonth) * 1.1);
+        },
+        newBruto1SalaryNew: function () {
+            return this.decimalPoints(parseFloat(this.totalOvertimePriceNew) + parseFloat(this.bruto1Salary));
+        },
+        newBruto1SalaryNewWithTreciStup: function () {
+            return this.decimalPoints(parseFloat(this.totalOvertimePriceNew) + parseFloat(this.bruto1Salary) - 500);
+        }
+      },
+      methods: {
+        decimalPoints(input) {
+          return input.toFixed(2);
         }
       }
     })
