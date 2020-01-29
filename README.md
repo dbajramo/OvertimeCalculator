@@ -1,2 +1,2 @@
 # OvertimeCalculator
-A simple salary overtime calculator
+A very simple salary overtime calculator
